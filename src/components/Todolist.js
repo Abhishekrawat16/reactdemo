@@ -1,6 +1,5 @@
 import React from 'react';
 import deleteImg from './delete-24px.svg';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import AddTask from './AddTask';
 
 
@@ -18,7 +17,7 @@ console.log(props);
                 <button className="delete " onClick={()=>{props.deleteTask(task.id)}} ><img  src={deleteImg}></img></button>
             </div>)
         })
-    ) :(<p className ="text-center"> No Pending Tasts </p>)
+    ) :(<p className ="text-center"> No Tast to Show</p>)
 
     return (
         <div>

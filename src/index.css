@@ -61,3 +61,7 @@ color: red;
 .error{
   color: red;
 }
+
+.msg{
+  color: green;
+}

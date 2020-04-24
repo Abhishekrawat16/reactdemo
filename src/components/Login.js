@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom';
+
 import LoginNav from './LoginNav';
+
 
 class Login extends React.Component {
 
@@ -8,10 +9,11 @@ class Login extends React.Component {
         super(props);
         this.state = {
             errors: [{ uId: '', pass: '' }],
-            users:[{uId:'abhi' ,pass:'abhi'}],
+            users: [{ uId: 'abhi', pass: 'abhi' }],
             uId: '',
             pass: '',
-            redirectToHome: false
+            redirectToHome: false,
+            userMsg:''
         }
         this.login = this.login.bind(this);
         this.update = this.update.bind(this);
@@ -20,9 +22,9 @@ class Login extends React.Component {
     validate() {
         let errors = [];
         let redirectToHome = false;
-        let currentId=this.state.uId;
-        let currentPass=this.state.pass;
-        let validUser=false;
+        let currentId = this.state.uId;
+        let currentPass = this.state.pass;
+        let validUser = false;
         if (currentId == '' && currentPass == '') {
             errors.push(
                 { uId: 'User Id cannot be empty', pass: 'Password cannot be empty' }
@@ -39,27 +41,27 @@ class Login extends React.Component {
             )
         }
         else {
-            this.state.users.forEach(user=>{
-                if(user.uId===currentId){
-                    validUser=true;
-                    if(user.pass===currentPass){
+            this.state.users.forEach(user => {
+                if (user.uId == currentId) {
+                    validUser = true;
+                    if (user.pass == currentPass) {
                         errors.push(
                             { uId: '', pass: '' }
                         )
                         redirectToHome = true;
                     }
-                    else{
+                    else {
                         errors.push(
                             { uId: '', pass: 'Password is Incorrect' }
                         )
                     }
                 }
             });
-            if(!validUser){
+            if (!validUser) {
                 errors.push(
-                    { uId: 'User Does Not Exists', pass: '' }
+                    { uId: 'User Does Not Exists. Please Register yourself using Register Button', pass: '' }
                 )
-            }   
+            }
         }
         this.setState({
             errors,
@@ -78,31 +80,52 @@ class Login extends React.Component {
     update(e) {
         this.setState({ [e.target.name]: e.target.value })
     }
+
+    registerUser=()=>{
+        let uId= this.state.uId;
+        let pass = this.state.pass;
+        let users=this.state.users;
+        let errors= [];
+        errors.push(
+            { uId: '', pass: '' }
+        );
+        users.push({uId:uId,pass:pass});
+        this.setState({
+            users,
+            uId:'',
+            pass:'',
+            errors,
+            userMsg:"User  "+uId+" is Registered Successfully"
+        })
+        
+    }
+
     render() {
-        console.log(this.props)
         return (
             <div>
                 <LoginNav />
-           
                 <form className="form-horizontal" onSubmit={this.login}>
                     <div className="form-group">
                         <label className="control-label col-sm-2" >User Id:</label>
                         <div className="col-sm-10">
-                            <input className="form-control" name="uId" id="username" type="text" onChange={this.update}></input><br />
+                            <input className="form-control" name="uId" id="username" type="text" onChange={this.update} value={this.state.uId}></input><br />
                             <label className="error">{this.state.errors[0].uId}</label>
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="control-label col-sm-2" >Password: </label>
                         <div className="col-sm-10">
-                            <input className="form-control" name="pass" id="userpass" type="password" onChange={this.update}></input><br />
+                            <input className="form-control" name="pass" id="userpass" type="password" onChange={this.update} value={this.state.pass}></input><br />
                             <label className="error">{this.state.errors[0].pass}</label>
                         </div>
                     </div>
                     <div className="form-group">
                         <div className="col-sm-offset-2 col-sm-10">
-                            <button  type="submit">Login</button>
-                        </div></div>
+                            <button type="submit">Login</button>
+                            <button type="button" onClick={this.registerUser}>Register</button>
+                        </div>
+                    </div>
+                    <label className="msg">{this.state.userMsg}</label>
                 </form>
             </div>
         );
