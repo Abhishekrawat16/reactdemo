@@ -2,27 +2,35 @@ import React from 'react';
 import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom';
 import TaskManagement from '../TaskManagement';
 import Login from './Login';
+import RegisterPage from './RegisterPage'
+
 
 class LoginForm extends React.Component {
 
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            errors: [{ uId: '', pass: '' }],
+            users:[{uId:'abhi' ,pass:'abhi'}],
+            uId: '',
+            pass: '',
+            redirectToHome: false
+        }
+    }
 
     render() {
-        console.log(this);
         return (
             <div>
                 <Router>
                     <Route exact path="/" component={Login}></Route>
                     <Route exact path="/home" component={TaskManagement}></Route>
                     <Route path="/register" component={RegisterPage}></Route>
-
                 </Router>
             </div>
         );
     }
 }
-const RegisterPage=()=>
-<h1>Register Page</h1>;
+
 
 
 

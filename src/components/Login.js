@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom';
+import LoginNav from './LoginNav';
 
 class Login extends React.Component {
 
@@ -7,6 +8,7 @@ class Login extends React.Component {
         super(props);
         this.state = {
             errors: [{ uId: '', pass: '' }],
+            users:[{uId:'abhi' ,pass:'abhi'}],
             uId: '',
             pass: '',
             redirectToHome: false
@@ -18,24 +20,46 @@ class Login extends React.Component {
     validate() {
         let errors = [];
         let redirectToHome = false;
-        if (this.state.uId == '' && this.state.pass == '') {
+        let currentId=this.state.uId;
+        let currentPass=this.state.pass;
+        let validUser=false;
+        if (currentId == '' && currentPass == '') {
             errors.push(
                 { uId: 'User Id cannot be empty', pass: 'Password cannot be empty' }
             )
         }
-        else if (this.state.uId == '' && this.state.pass != '') {
+        else if (currentId == '' && currentPass != '') {
             errors.push(
                 { uId: 'User Id cannot be empty', pass: '' }
             )
         }
-        else if (this.state.uId != '' && this.state.pass == '') {
+        else if (currentId != '' && currentPass == '') {
             errors.push(
                 { uId: '', pass: 'Password cannot be empty' }
             )
         }
         else {
-            errors.push({ uId: '', pass: '' });
-            redirectToHome = true;
+            this.state.users.forEach(user=>{
+                if(user.uId===currentId){
+                    validUser=true;
+                    if(user.pass===currentPass){
+                        errors.push(
+                            { uId: '', pass: '' }
+                        )
+                        redirectToHome = true;
+                    }
+                    else{
+                        errors.push(
+                            { uId: '', pass: 'Password is Incorrect' }
+                        )
+                    }
+                }
+            });
+            if(!validUser){
+                errors.push(
+                    { uId: 'User Does Not Exists', pass: '' }
+                )
+            }   
         }
         this.setState({
             errors,
@@ -58,10 +82,7 @@ class Login extends React.Component {
         console.log(this.props)
         return (
             <div>
-                <ul className="nav nav-pills nav-justified">
-                <li className="active"><a href="/">Login</a></li>&nbsp;|&nbsp;
-                <li><a href="/register">RegisterPage</a></li>
-                </ul>
+                <LoginNav />
            
                 <form className="form-horizontal" onSubmit={this.login}>
                     <div className="form-group">
